@@ -77,12 +77,7 @@ group-message-order-tester/
 
 ### Step-by-Step Execution:
 
-1. **Clone or navigate to the project directory:**
-   ```bash
-   cd group-message-order-tester
-   ```
-
-2. **(Optional but recommended) Create and activate a virtual environment:**
+1. **(Optional but recommended) Create and activate a virtual environment:**
    - **Windows (PowerShell):**
      ```powershell
      python -m venv venv
@@ -94,17 +89,17 @@ group-message-order-tester/
      source venv/bin/activate
      ```
 
-3. **Install dependencies:**
+2. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Start the Flask server:**
+3. **Start the Flask server:**
    ```bash
    python app.py
    ```
 
-5. **Open the application in your browser:**
+4. **Open the application in your browser:**
    Open: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
