@@ -1,0 +1,1174 @@
+/* ==========================================================================
+   Group Message Order Tester - Modern Academic Dashboard Stylesheet
+   Theme: Clean Light Academic Theme with Indigo/Navy Accents
+   Hinglish: Yeh CSS file clean modern layout aur fully responsive design deti hai.
+   ========================================================================== */
+
+:root {
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --border-focus: #3b82f6;
+
+    /* Theme Accents */
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #eef2ff;
+
+    --secondary: #64748b;
+    --secondary-hover: #475569;
+
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+    --success-border: #a7f3d0;
+
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    --warning-border: #fde68a;
+
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+    --danger-bg: #fef2f2;
+    --danger-border: #fecaca;
+
+    --pending: #ea580c;
+    --pending-bg: #fff7ed;
+    --pending-border: #fed7aa;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Reset and Global Setup */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Header Section
+   Hinglish: Academic header jo title, subtitle aur system status display karta hai.
+   ========================================================================== */
+.app-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.badge-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary);
+    margin-bottom: 0.35rem;
+}
+
+.status-indicator.live {
+    width: 8px;
+    height: 8px;
+    background-color: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--success-border);
+}
+
+.header-titles h1 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #1e1b4b;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-top: 0.2rem;
+}
+
+.header-desc {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    max-width: 780px;
+    margin-top: 0.4rem;
+}
+
+.header-status-box {
+    background: #f1f5f9;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    text-align: right;
+    min-width: 220px;
+}
+
+.status-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.3rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.badge-idle {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.badge-simulating {
+    background: var(--warning-bg);
+    color: #b45309;
+    border: 1px solid var(--warning-border);
+}
+
+.badge-pass {
+    background: var(--success-bg);
+    color: #065f46;
+    border: 1px solid var(--success-border);
+}
+
+.seq-counter-display {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.seq-counter-display strong {
+    color: var(--text-main);
+    font-size: 1.1rem;
+    font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   Dashboard Main Layout
+   Hinglish: Cards ka responsive grid layout
+   ========================================================================== */
+.dashboard-grid {
+    max-width: 1400px;
+    margin: 1.5rem auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1.15rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: #ffffff;
+}
+
+.card-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.card-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+    display: block;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ==========================================================================
+   1. Message Composer
+   Hinglish: Message bhejne ke controls aur forms
+   ========================================================================== */
+.form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group.flex-grow {
+    flex-grow: 1;
+    min-width: 280px;
+}
+
+.form-group label {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+select, input[type="text"] {
+    height: 42px;
+    padding: 0 0.85rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    font-size: 0.95rem;
+    background: #ffffff;
+    color: var(--text-main);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+select:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 42px;
+    padding: 0 1.25rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+.btn-danger {
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: 1px solid var(--danger-border);
+}
+
+.btn-danger:hover {
+    background: #fee2e2;
+}
+
+.btn-success {
+    background: var(--success);
+    color: #ffffff;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+.btn-sm {
+    height: 32px;
+    padding: 0 0.8rem;
+    font-size: 0.82rem;
+    background: #f1f5f9;
+    border: 1px solid var(--border-color);
+}
+
+.btn-sm:hover {
+    background: #e2e8f0;
+}
+
+.quick-samples {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.15rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border-color);
+}
+
+.quick-samples-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.btn-chip {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    color: #334155;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.btn-chip:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+}
+
+.btn-chip.highlight {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: #c7d2fe;
+    font-weight: 600;
+}
+
+.feedback-banner {
+    margin-top: 0.9rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+}
+
+.feedback-banner.feedback-success {
+    background: var(--success-bg);
+    color: #065f46;
+    border: 1px solid var(--success-border);
+}
+
+.feedback-banner.feedback-error {
+    background: var(--danger-bg);
+    color: #991b1b;
+    border: 1px solid var(--danger-border);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   2. Controls and Delay Settings
+   Hinglish: Sliders aur delay setting options
+   ========================================================================== */
+.controls-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.switch-container {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+}
+
+.switch-container input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #cbd5e1;
+    transition: 0.3s;
+    border-radius: 34px;
+}
+
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .switch-slider {
+    background-color: var(--primary);
+}
+
+input:checked + .switch-slider:before {
+    transform: translateX(22px);
+}
+
+.switch-label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+}
+
+.switch-label small {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.manual-delays-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+}
+
+.delay-control-box {
+    background: #f8fafc;
+    padding: 0.9rem 1.15rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.delay-control-box label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.delay-val-tag {
+    background: #e2e8f0;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: #1e293b;
+}
+
+input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+/* ==========================================================================
+   3. Central Sequencer
+   Hinglish: Global sequence assignment table
+   ========================================================================== */
+.sequencer-stat-badge {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    border: 1px solid #c7d2fe;
+}
+
+.sequencer-info-callout {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.25rem;
+    font-size: 0.86rem;
+    color: #166534;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.sequencer-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    text-align: left;
+}
+
+.sequencer-table th {
+    background: #f8fafc;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 700;
+    color: #475569;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.sequencer-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: #1e293b;
+}
+
+.sequencer-table tr:hover {
+    background-color: #f8fafc;
+}
+
+.seq-tag {
+    display: inline-block;
+    background: #e0e7ff;
+    color: #3730a3;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.empty-row td {
+    text-align: center;
+    padding: 1.75rem !important;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* ==========================================================================
+   4. Distributed Process Node Panels (P1, P2, P3)
+   Hinglish: Process nodes ka card grid (Desktop par 3 columns, mobile par 1 column)
+   ========================================================================== */
+.section-title-wrap {
+    margin-bottom: 1rem;
+}
+
+.section-title-wrap h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.section-title-wrap p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+.process-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.process-card {
+    border-top: 4px solid var(--primary);
+    display: flex;
+    flex-direction: column;
+}
+
+#process-card-P1 { border-top-color: #3b82f6; }
+#process-card-P2 { border-top-color: #8b5cf6; }
+#process-card-P3 { border-top-color: #06b6d4; }
+
+.process-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #f8fafc;
+}
+
+.process-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.p1-header .process-avatar { background: #3b82f6; }
+.p2-header .process-avatar { background: #8b5cf6; }
+.p3-header .process-avatar { background: #06b6d4; }
+
+.process-meta {
+    flex-grow: 1;
+}
+
+.process-meta h3 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.node-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.1rem 0.45rem;
+    border-radius: var(--radius-sm);
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.expected-seq-pill {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    color: #334155;
+    text-align: right;
+}
+
+.expected-seq-pill strong {
+    color: var(--primary);
+    font-size: 1rem;
+    font-family: var(--font-mono);
+}
+
+.process-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    flex-grow: 1;
+}
+
+.buffer-section {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+}
+
+.buffer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 0.65rem;
+    color: #334155;
+}
+
+.pending-section {
+    background: var(--pending-bg);
+    border-color: var(--pending-border);
+}
+
+.delivered-section {
+    background: var(--success-bg);
+    border-color: var(--success-border);
+}
+
+.buffer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    overflow-y: auto;
+    max-height: 160px;
+}
+
+.empty-state {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    margin: auto 0;
+    padding: 0.75rem 0;
+}
+
+/* Individual Item in Process Buffer */
+.packet-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    padding: 0.45rem 0.65rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.packet-item.pending-packet {
+    border-left: 3px solid var(--pending);
+    background: #fffaf0;
+}
+
+.packet-item.delivered-packet {
+    border-left: 3px solid var(--success);
+    background: #ffffff;
+}
+
+.packet-info {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.packet-text {
+    font-weight: 500;
+    color: #1e293b;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.packet-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   5. Total Order Verification Section
+   Hinglish: Formal verification pass/fail status
+   ========================================================================== */
+.verification-summary-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.verif-badge-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.verif-large-badge {
+    font-size: 1.6rem;
+    font-weight: 900;
+    padding: 0.6rem 2rem;
+    border-radius: 9999px;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.verif-large-badge.badge-pass {
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.verif-large-badge.badge-fail {
+    background: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+}
+
+.verif-large-badge.badge-neutral {
+    background: #94a3b8;
+    color: #ffffff;
+}
+
+.verif-large-badge.badge-progress {
+    background: #f59e0b;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+}
+
+.verif-badge-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.verif-content-column {
+    flex-grow: 1;
+    min-width: 320px;
+}
+
+.verif-explanation {
+    font-size: 0.95rem;
+    color: #334155;
+    background: #f1f5f9;
+    padding: 0.9rem 1.15rem;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--primary);
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+}
+
+.delivery-sequences-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+}
+
+.seq-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.88rem;
+}
+
+.seq-label {
+    min-width: 140px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.seq-track {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius-sm);
+    flex-grow: 1;
+    min-height: 34px;
+}
+
+.track-pill {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+}
+
+.track-arrow {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.empty-tag {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+.criteria-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.84rem;
+    color: #334155;
+}
+
+.crit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.crit-pass .crit-icon {
+    color: var(--success);
+}
+
+.crit-fail .crit-icon {
+    color: var(--danger);
+}
+
+/* ==========================================================================
+   6. Simulation Event Log & Timeline
+   Hinglish: Realtime logs list
+   ========================================================================== */
+.log-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.log-controls select {
+    height: 32px;
+    font-size: 0.82rem;
+    padding: 0 0.6rem;
+}
+
+.timeline-container {
+    max-height: 280px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+}
+
+.timeline-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: #ffffff;
+    border-radius: var(--radius-sm);
+    border-left: 3px solid #cbd5e1;
+    font-size: 0.84rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.timeline-row.t-submitted { border-left-color: #3b82f6; }
+.timeline-row.t-sequenced { border-left-color: #6366f1; }
+.timeline-row.t-arrived   { border-left-color: #f59e0b; }
+.timeline-row.t-pending   { border-left-color: #ea580c; background: #fffaf0; }
+.timeline-row.t-delivered { border-left-color: #10b981; }
+.timeline-row.t-reset     { border-left-color: #94a3b8; }
+
+.t-time {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    white-space: nowrap;
+    padding-top: 0.1rem;
+}
+
+.t-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.1rem 0.45rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.t-badge.badge-blue { background: #dbeafe; color: #1e40af; }
+.t-badge.badge-indigo { background: #e0e7ff; color: #3730a3; }
+.t-badge.badge-amber { background: #fef3c7; color: #92400e; }
+.t-badge.badge-orange { background: #ffedd5; color: #9a3412; }
+.t-badge.badge-green { background: #d1fae5; color: #065f46; }
+.t-badge.badge-gray { background: #f1f5f9; color: #475569; }
+
+.t-desc {
+    flex-grow: 1;
+    color: #1e293b;
+}
+
+/* ==========================================================================
+   7. Hinglish "How It Works" Section
+   Hinglish: Clear boxes explaining each component
+   ========================================================================== */
+.hinglish-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
+
+.hinglish-box {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hinglish-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: #cbd5e1;
+}
+
+.h-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.hinglish-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.65rem;
+}
+
+.hinglish-box p {
+    font-size: 0.85rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
+    line-height: 1.45;
+}
+
+.hinglish-box strong {
+    color: #0f172a;
+}
+
+/* ==========================================================================
+   8. Theory & Academic Notes Section
+   Hinglish: Formal theory aur math notes
+   ========================================================================== */
+.theory-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+}
+
+.theory-item h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.35rem;
+}
+
+.theory-item p {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.note-box {
+    background: #fffbeb;
+    border-left: 4px solid var(--warning);
+    padding: 0.9rem 1.15rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    color: #92400e;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.app-footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background: #ffffff;
+    margin-top: 2rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+.footer-sub {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   Responsive Design (Desktop, Tablet, Mobile)
+   Hinglish: Mobile aur small screens ke liye clean vertical stacking
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .process-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-status-box {
+        text-align: left;
+        width: 100%;
+    }
+
+    .form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .submit-btn-group {
+        margin-top: 0.5rem;
+    }
+
+    .controls-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .action-buttons {
+        width: 100%;
+    }
+
+    .action-buttons .btn {
+        flex: 1;
+    }
+
+    .verification-summary-layout {
+        flex-direction: column;
+    }
+
+    .verif-badge-column {
+        width: 100%;
+    }
+}

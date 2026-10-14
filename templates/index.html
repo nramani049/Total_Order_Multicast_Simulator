@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Message Order Tester - Total Order Multicast Simulator</title>
+    <!-- Hinglish: CSS styling file ko link kiya gaya hai -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ==========================================
+         A. HEADER SECTION
+         Hinglish: Website ka main title, subtitle aur short description
+         ========================================== -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="header-titles">
+                <div class="badge-title">
+                    <span class="status-indicator live"></span>
+                    <span>Distributed Systems Academic Lab</span>
+                </div>
+                <h1>Group Message Order Tester</h1>
+                <p class="subtitle">Total Order Multicast Simulation using a Centralized Sequencer</p>
+                <p class="header-desc">
+                    Explore how distributed processes (Alice, Bob, and Charlie) deliver multicast messages in the 
+                    <strong>exact same global sequence</strong>, even when random network delays cause messages to arrive 
+                    <strong>out-of-order</strong>.
+                </p>
+            </div>
+            <div class="header-status-box">
+                <span class="status-label">GLOBAL SYSTEM STATE</span>
+                <div id="system-status-badge" class="badge badge-idle">Ready / Idle</div>
+                <div class="seq-counter-display">
+                    Next Sequence #: <strong id="header-next-seq">1</strong>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-grid">
+
+        <!-- ==========================================
+             B. MESSAGE COMPOSER & QUICK SCENARIOS
+             Hinglish: Yahan se user message create karke send kar sakta hai
+             ========================================== -->
+        <section class="card composer-card">
+            <div class="card-header">
+                <h2>1. Message Composer</h2>
+                <span class="card-subtitle">Submit a multicast message to the Central Sequencer</span>
+            </div>
+            <div class="card-body">
+                <form id="composer-form" onsubmit="handleSendMessage(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sender-select">Select Sender Process:</label>
+                            <select id="sender-select" required>
+                                <option value="Alice">Alice (P1)</option>
+                                <option value="Bob">Bob (P2)</option>
+                                <option value="Charlie">Charlie (P3)</option>
+                            </select>
+                        </div>
+                        <div class="form-group flex-grow">
+                            <label for="message-input">Message Content (Max 200 chars):</label>
+                            <input type="text" id="message-input" placeholder="e.g., Transfer $100 from A to B..." maxlength="200" required autocomplete="off">
+                        </div>
+                        <div class="form-group submit-btn-group">
+                            <label>&nbsp;</label>
+                            <button type="submit" id="btn-send-message" class="btn btn-primary">
+                                <span class="btn-icon">➤</span> Send Message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Quick Presets for Demo -->
+                <div class="quick-samples">
+                    <span class="quick-samples-label">Quick Academic Scenarios:</span>
+                    <button type="button" class="btn-chip" onclick="loadSampleScenario('in_order')">
+                        Scenario 1: Synchronous In-Order Delivery
+                    </button>
+                    <button type="button" class="btn-chip highlight" onclick="loadSampleScenario('out_of_order')">
+                        Scenario 2: Out-of-Order Arrival (Buffer Demo)
+                    </button>
+                    <button type="button" class="btn-chip" onclick="loadSampleScenario('high_jitter')">
+                        Scenario 3: High Jitter Asymmetric Multicast
+                    </button>
+                </div>
+
+                <div id="composer-feedback" class="feedback-banner hidden"></div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             C. SIMULATION CONTROLS & DELAY SETTINGS
+             Hinglish: Network delays aur simulation controls (Reset, Pause, Random Mode)
+             ========================================== -->
+        <section class="card controls-card">
+            <div class="card-header">
+                <h2>2. Network Delay & Simulation Controls</h2>
+                <span class="card-subtitle">Configure simulated physical transit latency per process</span>
+            </div>
+            <div class="card-body">
+                <div class="controls-toolbar">
+                    <div class="toggle-group">
+                        <label class="switch-container">
+                            <input type="checkbox" id="random-delay-toggle" onchange="toggleRandomDelayMode(event)">
+                            <span class="switch-slider"></span>
+                        </label>
+                        <span class="switch-label">
+                            <strong>Random Delay Mode (Network Jitter)</strong>
+                            <small id="delay-mode-desc">Assigns unpredictable transit latency to each process</small>
+                        </span>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button type="button" id="btn-pause-resume" class="btn btn-secondary" onclick="togglePauseSimulation()">
+                            <span id="pause-icon">⏸</span> <span id="pause-text">Pause Transit</span>
+                        </button>
+                        <button type="button" id="btn-reset" class="btn btn-danger" onclick="handleResetSimulation()">
+                            <span>↺</span> Reset Simulation
+                        </button>
+                        <button type="button" id="btn-verify-now" class="btn btn-success" onclick="checkTotalOrderVerification()">
+                            <span>✓</span> Verify Total Order
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Manual Delay Inputs -->
+                <div id="manual-delays-panel" class="manual-delays-grid">
+                    <div class="delay-control-box">
+                        <label for="delay-p1">P1 (Alice) Delay: <span id="delay-val-p1" class="delay-val-tag">1000 ms</span></label>
+                        <input type="range" id="delay-p1" min="0" max="5000" step="100" value="1000" oninput="updateDelayDisplay('p1', this.value)">
+                    </div>
+                    <div class="delay-control-box">
+                        <label for="delay-p2">P2 (Bob) Delay: <span id="delay-val-p2" class="delay-val-tag">2500 ms</span></label>
+                        <input type="range" id="delay-p2" min="0" max="5000" step="100" value="2500" oninput="updateDelayDisplay('p2', this.value)">
+                    </div>
+                    <div class="delay-control-box">
+                        <label for="delay-p3">P3 (Charlie) Delay: <span id="delay-val-p3" class="delay-val-tag">500 ms</span></label>
+                        <input type="range" id="delay-p3" min="0" max="5000" step="100" value="500" oninput="updateDelayDisplay('p3', this.value)">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             E. CENTRAL SEQUENCER PANEL
+             Hinglish: Central Sequencer ka view jahan Sequence Number assign hota hai
+             ========================================== -->
+        <section class="card sequencer-card">
+            <div class="card-header flex-between">
+                <div>
+                    <h2>3. Centralized Sequencer</h2>
+                    <span class="card-subtitle">Single source of truth for global message ordering</span>
+                </div>
+                <div class="sequencer-stat-badge">
+                    <span>Sequenced Messages: </span>
+                    <strong id="sequencer-total-count">0</strong>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="sequencer-pipeline">
+                    <div class="sequencer-info-callout">
+                        <div class="callout-icon">ℹ️</div>
+                        <div class="callout-text">
+                            The Central Sequencer receives submitted messages, assigns monotonically increasing sequence numbers 
+                            (<strong>Seq #1, #2, #3...</strong>), and multicasts the sequenced packet to all group members.
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="sequencer-table">
+                            <thead>
+                                <tr>
+                                    <th>Seq #</th>
+                                    <th>Message ID</th>
+                                    <th>Origin Sender</th>
+                                    <th>Content</th>
+                                    <th>Timestamp</th>
+                                    <th>Multicast Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sequencer-messages-body">
+                                <tr class="empty-row">
+                                    <td colspan="6">No messages sequenced yet. Send a message above to start!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             D. PROCESS PANELS (P1, P2, P3)
+             Hinglish: Teeno simulated processes ka individual state
+             ========================================== -->
+        <section class="process-section">
+            <div class="section-title-wrap">
+                <h2>4. Distributed Process Node Panels</h2>
+                <p>Observe each process's internal buffers: Received (transit arrival), Pending (holding queue), and Delivered (ordered execution).</p>
+            </div>
+
+            <div class="process-cards-grid">
+                <!-- P1 Alice -->
+                <div class="card process-card" id="process-card-P1">
+                    <div class="card-header process-header p1-header">
+                        <div class="process-avatar">P1</div>
+                        <div class="process-meta">
+                            <h3>Process 1 — Alice</h3>
+                            <span class="node-badge" id="p1-status-pill">Active</span>
+                        </div>
+                        <div class="expected-seq-pill" title="Next sequence number expected before delivery">
+                            Expected Seq: <strong id="p1-expected-seq">1</strong>
+                        </div>
+                    </div>
+                    <div class="card-body process-body">
+                        <!-- Received Buffer -->
+                        <div class="buffer-section">
+                            <div class="buffer-header">
+                                <span>📥 Physical Arrivals (<span id="p1-recv-count">0</span>)</span>
+                                <small class="text-muted">Arrival order</small>
+                            </div>
+                            <div class="buffer-list" id="p1-received-list">
+                                <div class="empty-state">No arrivals yet</div>
+                            </div>
+                        </div>
+
+                        <!-- Pending Queue -->
+                        <div class="buffer-section pending-section">
+                            <div class="buffer-header">
+                                <span>⏳ Pending Buffer (<span id="p1-pend-count">0</span>)</span>
+                                <small class="text-warning">Held (Seq &gt; Expected)</small>
+                            </div>
+                            <div class="buffer-list" id="p1-pending-list">
+                                <div class="empty-state">Queue is empty</div>
+                            </div>
+                        </div>
+
+                        <!-- Delivered Order -->
+                        <div class="buffer-section delivered-section">
+                            <div class="buffer-header">
+                                <span>✅ Delivered Order (<span id="p1-deliv-count">0</span>)</span>
+                                <small class="text-success">Total order sequence</small>
+                            </div>
+                            <div class="buffer-list" id="p1-delivered-list">
+                                <div class="empty-state">Nothing delivered yet</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- P2 Bob -->
+                <div class="card process-card" id="process-card-P2">
+                    <div class="card-header process-header p2-header">
+                        <div class="process-avatar">P2</div>
+                        <div class="process-meta">
+                            <h3>Process 2 — Bob</h3>
+                            <span class="node-badge" id="p2-status-pill">Active</span>
+                        </div>
+                        <div class="expected-seq-pill" title="Next sequence number expected before delivery">
+                            Expected Seq: <strong id="p2-expected-seq">1</strong>
+                        </div>
+                    </div>
+                    <div class="card-body process-body">
+                        <!-- Received Buffer -->
+                        <div class="buffer-section">
+                            <div class="buffer-header">
+                                <span>📥 Physical Arrivals (<span id="p2-recv-count">0</span>)</span>
+                                <small class="text-muted">Arrival order</small>
+                            </div>
+                            <div class="buffer-list" id="p2-received-list">
+                                <div class="empty-state">No arrivals yet</div>
+                            </div>
+                        </div>
+
+                        <!-- Pending Queue -->
+                        <div class="buffer-section pending-section">
+                            <div class="buffer-header">
+                                <span>⏳ Pending Buffer (<span id="p2-pend-count">0</span>)</span>
+                                <small class="text-warning">Held (Seq &gt; Expected)</small>
+                            </div>
+                            <div class="buffer-list" id="p2-pending-list">
+                                <div class="empty-state">Queue is empty</div>
+                            </div>
+                        </div>
+
+                        <!-- Delivered Order -->
+                        <div class="buffer-section delivered-section">
+                            <div class="buffer-header">
+                                <span>✅ Delivered Order (<span id="p2-deliv-count">0</span>)</span>
+                                <small class="text-success">Total order sequence</small>
+                            </div>
+                            <div class="buffer-list" id="p2-delivered-list">
+                                <div class="empty-state">Nothing delivered yet</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- P3 Charlie -->
+                <div class="card process-card" id="process-card-P3">
+                    <div class="card-header process-header p3-header">
+                        <div class="process-avatar">P3</div>
+                        <div class="process-meta">
+                            <h3>Process 3 — Charlie</h3>
+                            <span class="node-badge" id="p3-status-pill">Active</span>
+                        </div>
+                        <div class="expected-seq-pill" title="Next sequence number expected before delivery">
+                            Expected Seq: <strong id="p3-expected-seq">1</strong>
+                        </div>
+                    </div>
+                    <div class="card-body process-body">
+                        <!-- Received Buffer -->
+                        <div class="buffer-section">
+                            <div class="buffer-header">
+                                <span>📥 Physical Arrivals (<span id="p3-recv-count">0</span>)</span>
+                                <small class="text-muted">Arrival order</small>
+                            </div>
+                            <div class="buffer-list" id="p3-received-list">
+                                <div class="empty-state">No arrivals yet</div>
+                            </div>
+                        </div>
+
+                        <!-- Pending Queue -->
+                        <div class="buffer-section pending-section">
+                            <div class="buffer-header">
+                                <span>⏳ Pending Buffer (<span id="p3-pend-count">0</span>)</span>
+                                <small class="text-warning">Held (Seq &gt; Expected)</small>
+                            </div>
+                            <div class="buffer-list" id="p3-pending-list">
+                                <div class="empty-state">Queue is empty</div>
+                            </div>
+                        </div>
+
+                        <!-- Delivered Order -->
+                        <div class="buffer-section delivered-section">
+                            <div class="buffer-header">
+                                <span>✅ Delivered Order (<span id="p3-deliv-count">0</span>)</span>
+                                <small class="text-success">Total order sequence</small>
+                            </div>
+                            <div class="buffer-list" id="p3-delivered-list">
+                                <div class="empty-state">Nothing delivered yet</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             G. TOTAL ORDER VERIFICATION
+             Hinglish: Yahan check hota hai ki teeno processes ka delivery sequence same hai ya nahi
+             ========================================== -->
+        <section class="card verification-card">
+            <div class="card-header">
+                <h2>5. Total Order Multicast Verification</h2>
+                <span class="card-subtitle">Formal mathematical check across all process delivery histories</span>
+            </div>
+            <div class="card-body">
+                <div class="verification-summary-layout">
+                    <div class="verif-badge-column">
+                        <div id="verif-status-badge" class="verif-large-badge badge-neutral">READY</div>
+                        <span class="verif-badge-sub">Automated Consistency Checker</span>
+                    </div>
+                    <div class="verif-content-column">
+                        <p id="verif-explanation-text" class="verif-explanation">
+                            Submit messages to test whether all processes reach identical delivery order despite network latency.
+                        </p>
+                        
+                        <div class="delivery-sequences-comparison">
+                            <div class="seq-row">
+                                <span class="seq-label">P1 Delivery History:</span>
+                                <div id="p1-history-track" class="seq-track"><span class="empty-tag">[Empty]</span></div>
+                            </div>
+                            <div class="seq-row">
+                                <span class="seq-label">P2 Delivery History:</span>
+                                <div id="p2-history-track" class="seq-track"><span class="empty-tag">[Empty]</span></div>
+                            </div>
+                            <div class="seq-row">
+                                <span class="seq-label">P3 Delivery History:</span>
+                                <div id="p3-history-track" class="seq-track"><span class="empty-tag">[Empty]</span></div>
+                            </div>
+                        </div>
+
+                        <div class="criteria-list">
+                            <div class="crit-item" id="crit-match">
+                                <span class="crit-icon">⚪</span> <strong>Matching Sequences:</strong> All processes have delivered identical message sequences.
+                            </div>
+                            <div class="crit-item" id="crit-mono">
+                                <span class="crit-icon">⚪</span> <strong>Monotonic Sequencing:</strong> Sequence numbers are strictly increasing (1, 2, 3...) with zero gaps.
+                            </div>
+                            <div class="crit-item" id="crit-pending">
+                                <span class="crit-icon">⚪</span> <strong>Buffer Resolution:</strong> All pending queues resolved and zero lost messages.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             F. TIMELINE / EVENT LOG
+             Hinglish: Real-time event log aur filtered timeline
+             ========================================== -->
+        <section class="card timeline-card">
+            <div class="card-header flex-between">
+                <div>
+                    <h2>6. Simulation Event Log & Timeline</h2>
+                    <span class="card-subtitle">Granular audit log of submission, sequencing, arrival, hold, and delivery</span>
+                </div>
+                <div class="log-controls">
+                    <select id="log-filter" onchange="filterEventLogs(this.value)">
+                        <option value="ALL">All Events</option>
+                        <option value="SEQUENCER">Sequencer Only</option>
+                        <option value="P1">P1 (Alice)</option>
+                        <option value="P2">P2 (Bob)</option>
+                        <option value="P3">P3 (Charlie)</option>
+                        <option value="PENDING">Pending Holds Only</option>
+                        <option value="DELIVERED">Deliveries Only</option>
+                    </select>
+                    <button type="button" class="btn btn-sm" onclick="clearEventLogDisplay()">Clear View</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="timeline-container" id="timeline-container">
+                    <div class="empty-state">Waiting for simulation events...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             I. HINGLISH "HOW IT WORKS" SECTION (REQUIRED)
+             Hinglish: Beginner-friendly explanation of core concepts
+             ========================================== -->
+        <section class="card hinglish-card">
+            <div class="card-header">
+                <h2>7. How It Works (Kaise Kaam Karta Hai? - Hinglish Guide)</h2>
+                <span class="card-subtitle">Total Order Multicast concepts explained in simple Hindi-English</span>
+            </div>
+            <div class="card-body">
+                <div class="hinglish-grid">
+                    <div class="hinglish-box">
+                        <div class="h-icon">👑</div>
+                        <h3>1. Central Sequencer</h3>
+                        <p><strong>What:</strong> Ek central coordinator jo backend server par run hota hai.</p>
+                        <p><strong>Why:</strong> Bina central coordinator ke har process ko alag order mein packets mil sakte hain.</p>
+                        <p><strong>How:</strong> Har naye message ko 1, 2, 3... monotonically increasing sequence number deta hai aur sabko multicast karta hai.</p>
+                    </div>
+
+                    <div class="hinglish-box">
+                        <div class="h-icon">🔢</div>
+                        <h3>2. Sequence Number</h3>
+                        <p><strong>What:</strong> Har message ka unique global token number.</p>
+                        <p><strong>Why:</strong> Network delay ki wajah se arrival order change hone par bhi final delivery order preserve rakhne ke liye.</p>
+                        <p><strong>How:</strong> Process tabhi message deliver karta hai jab message ka seq == expected_seq ho.</p>
+                    </div>
+
+                    <div class="hinglish-box">
+                        <div class="h-icon">⏱️</div>
+                        <h3>3. Simulated Network Delay</h3>
+                        <p><strong>What:</strong> Real network jitter aur transit latency ka simulation (0 to 5000 ms).</p>
+                        <p><strong>Why:</strong> Yeh demonstrate karne ke liye ki physical arrival time different hone par bhi distributed order violate nahi hota.</p>
+                        <p><strong>How:</strong> JavaScript timers ya delay sliders se packets different times par arrive karwaye jaate hain.</p>
+                    </div>
+
+                    <div class="hinglish-box">
+                        <div class="h-icon">📦</div>
+                        <h3>4. Pending Queue (Buffer)</h3>
+                        <p><strong>What:</strong> Har process ka local buffer memory.</p>
+                        <p><strong>Why:</strong> Agar Seq #2 pehle aa jaye aur Seq #1 abhi raste mein ho, toh Seq #2 ko hold karna zaroori hai.</p>
+                        <p><strong>How:</strong> Message pending queue mein wait karta hai. Jaise hi Seq #1 deliver hota hai, Seq #2 automatically cascade deliver ho jata hai!</p>
+                    </div>
+
+                    <div class="hinglish-box">
+                        <div class="h-icon">🎯</div>
+                        <h3>5. Total Order Verification</h3>
+                        <p><strong>What:</strong> Automated consistency checker jo delivery histories match karta hai.</p>
+                        <p><strong>Why:</strong> Validate karne ke liye ki distributed algorithm ne total order satisfy kiya ya fail kiya.</p>
+                        <p><strong>How:</strong> Teeno processes (P1, P2, P3) ki delivered list ko compare karke PASS ya FAIL declare karta hai.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             H. SHORT THEORY SECTION (REQUIRED)
+             Hinglish: Formal academic theory section
+             ========================================== -->
+        <section class="card theory-card">
+            <div class="card-header">
+                <h2>8. Distributed Computing Theory & Academic Notes</h2>
+                <span class="card-subtitle">Formal definitions and architectural principles</span>
+            </div>
+            <div class="card-body theory-content">
+                <div class="theory-item">
+                    <h4>What is Total Order Multicast?</h4>
+                    <p>
+                        In distributed computing, a multicast communication primitive is defined as <strong>Totally Ordered</strong> if 
+                        all correct participating processes deliver all multicast messages in the <strong>exact same sequence</strong>. Formally: 
+                        if process \(P_i\) delivers message \(m_1\) before message \(m_2\), then every correct process \(P_j\) must also deliver 
+                        \(m_1\) before \(m_2\).
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>The Centralized Sequencer Architecture</h4>
+                    <p>
+                        In a centralized sequencer algorithm, one node is designated as the Sequencer. Whenever any process sends a multicast message, 
+                        it transmits it to the Sequencer. The Sequencer assigns a strictly monotonic integer sequence number \(S \in \mathbb{N}\) 
+                        and broadcasts the sequenced message. Each receiving process maintains a local variable <code>expected_seq</code> initialized to 1.
+                        A message with sequence number \(S\) is delivered to the application layer if and only if \(S = \text{expected\_seq}\). 
+                        If \(S > \text{expected\_seq}\), it is buffered in a pending queue until missing preceding messages arrive.
+                    </p>
+                </div>
+                <div class="theory-item">
+                    <h4>Arrival Order vs. Delivery Order</h4>
+                    <p>
+                        <strong>Physical Arrival Order:</strong> The actual wall-clock instant a packet reaches a process's network socket, 
+                        subject to routing latency and jitter.<br>
+                        <strong>Logical Delivery Order:</strong> The instant the message is handed off to the application logic after sequence checking.<br>
+                        <em>Crucial insight:</em> Arrival order can be completely disordered and different across nodes, but Delivery Order remains strictly uniform!
+                    </p>
+                </div>
+                <div class="theory-item note-box">
+                    <strong>⚠️ Simulation Disclaimer:</strong> This application is an educational software simulator running on Python Flask and Vanilla JavaScript. 
+                    It accurately models the logical states, queue buffers, and sequence transitions of Total Order Multicast, but does not use raw IP multicast or raw hardware socket protocols.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <p><strong>Group Message Order Tester</strong> &bull; Total Order Multicast Simulator</p>
+        <p class="footer-sub">Designed for Distributed Computing Coursework & Academic Demonstrations</p>
+    </footer>
+
+    <!-- Hinglish: Vanilla JavaScript logic file ko link kiya gaya hai -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
