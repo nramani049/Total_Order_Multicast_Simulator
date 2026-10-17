@@ -4,21 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Message Order Tester - Total Order Multicast Simulator</title>
-    <!-- Hinglish: CSS styling file ko link kiya gaya hai -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-    <!-- ==========================================
-         A. HEADER SECTION
-         Hinglish: Website ka main title, subtitle aur short description
-         ========================================== -->
+    <!-- Header Section -->
     <header class="app-header">
         <div class="header-container">
             <div class="header-titles">
                 <div class="badge-title">
                     <span class="status-indicator live"></span>
-                    <span>Distributed Systems Academic Lab</span>
+                    <span>Distributed Systems Lab</span>
                 </div>
                 <h1>Group Message Order Tester</h1>
                 <p class="subtitle">Total Order Multicast Simulation using a Centralized Sequencer</p>
@@ -40,10 +36,7 @@
 
     <main class="dashboard-grid">
 
-        <!-- ==========================================
-             B. MESSAGE COMPOSER & QUICK SCENARIOS
-             Hinglish: Yahan se user message create karke send kar sakta hai
-             ========================================== -->
+        <!-- Message Composer -->
         <section class="card composer-card">
             <div class="card-header">
                 <h2>1. Message Composer</h2>
@@ -73,9 +66,9 @@
                     </div>
                 </form>
 
-                <!-- Quick Presets for Demo -->
+                <!-- Preset Scenarios -->
                 <div class="quick-samples">
-                    <span class="quick-samples-label">Quick Academic Scenarios:</span>
+                    <span class="quick-samples-label">Preset Scenarios:</span>
                     <button type="button" class="btn-chip" onclick="loadSampleScenario('in_order')">
                         Scenario 1: Synchronous In-Order Delivery
                     </button>
@@ -91,10 +84,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             C. SIMULATION CONTROLS & DELAY SETTINGS
-             Hinglish: Network delays aur simulation controls (Reset, Pause, Random Mode)
-             ========================================== -->
+        <!-- Simulation Controls -->
         <section class="card controls-card">
             <div class="card-header">
                 <h2>2. Network Delay & Simulation Controls</h2>
@@ -144,10 +134,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             E. CENTRAL SEQUENCER PANEL
-             Hinglish: Central Sequencer ka view jahan Sequence Number assign hota hai
-             ========================================== -->
+        <!-- Central Sequencer -->
         <section class="card sequencer-card">
             <div class="card-header flex-between">
                 <div>
@@ -192,10 +179,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             D. PROCESS PANELS (P1, P2, P3)
-             Hinglish: Teeno simulated processes ka individual state
-             ========================================== -->
+        <!-- Process Panels -->
         <section class="process-section">
             <div class="section-title-wrap">
                 <h2>4. Distributed Process Node Panels</h2>
@@ -349,10 +333,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             G. TOTAL ORDER VERIFICATION
-             Hinglish: Yahan check hota hai ki teeno processes ka delivery sequence same hai ya nahi
-             ========================================== -->
+        <!-- Total Order Verification -->
         <section class="card verification-card">
             <div class="card-header">
                 <h2>5. Total Order Multicast Verification</h2>
@@ -400,10 +381,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             F. TIMELINE / EVENT LOG
-             Hinglish: Real-time event log aur filtered timeline
-             ========================================== -->
+        <!-- Event Log & Timeline -->
         <section class="card timeline-card">
             <div class="card-header flex-between">
                 <div>
@@ -430,113 +408,12 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             I. HINGLISH "HOW IT WORKS" SECTION (REQUIRED)
-             Hinglish: Beginner-friendly explanation of core concepts
-             ========================================== -->
-        <section class="card hinglish-card">
-            <div class="card-header">
-                <h2>7. How It Works (Kaise Kaam Karta Hai? - Hinglish Guide)</h2>
-                <span class="card-subtitle">Total Order Multicast concepts explained in simple Hindi-English</span>
-            </div>
-            <div class="card-body">
-                <div class="hinglish-grid">
-                    <div class="hinglish-box">
-                        <div class="h-icon">👑</div>
-                        <h3>1. Central Sequencer</h3>
-                        <p><strong>What:</strong> Ek central coordinator jo backend server par run hota hai.</p>
-                        <p><strong>Why:</strong> Bina central coordinator ke har process ko alag order mein packets mil sakte hain.</p>
-                        <p><strong>How:</strong> Har naye message ko 1, 2, 3... monotonically increasing sequence number deta hai aur sabko multicast karta hai.</p>
-                    </div>
-
-                    <div class="hinglish-box">
-                        <div class="h-icon">🔢</div>
-                        <h3>2. Sequence Number</h3>
-                        <p><strong>What:</strong> Har message ka unique global token number.</p>
-                        <p><strong>Why:</strong> Network delay ki wajah se arrival order change hone par bhi final delivery order preserve rakhne ke liye.</p>
-                        <p><strong>How:</strong> Process tabhi message deliver karta hai jab message ka seq == expected_seq ho.</p>
-                    </div>
-
-                    <div class="hinglish-box">
-                        <div class="h-icon">⏱️</div>
-                        <h3>3. Simulated Network Delay</h3>
-                        <p><strong>What:</strong> Real network jitter aur transit latency ka simulation (0 to 5000 ms).</p>
-                        <p><strong>Why:</strong> Yeh demonstrate karne ke liye ki physical arrival time different hone par bhi distributed order violate nahi hota.</p>
-                        <p><strong>How:</strong> JavaScript timers ya delay sliders se packets different times par arrive karwaye jaate hain.</p>
-                    </div>
-
-                    <div class="hinglish-box">
-                        <div class="h-icon">📦</div>
-                        <h3>4. Pending Queue (Buffer)</h3>
-                        <p><strong>What:</strong> Har process ka local buffer memory.</p>
-                        <p><strong>Why:</strong> Agar Seq #2 pehle aa jaye aur Seq #1 abhi raste mein ho, toh Seq #2 ko hold karna zaroori hai.</p>
-                        <p><strong>How:</strong> Message pending queue mein wait karta hai. Jaise hi Seq #1 deliver hota hai, Seq #2 automatically cascade deliver ho jata hai!</p>
-                    </div>
-
-                    <div class="hinglish-box">
-                        <div class="h-icon">🎯</div>
-                        <h3>5. Total Order Verification</h3>
-                        <p><strong>What:</strong> Automated consistency checker jo delivery histories match karta hai.</p>
-                        <p><strong>Why:</strong> Validate karne ke liye ki distributed algorithm ne total order satisfy kiya ya fail kiya.</p>
-                        <p><strong>How:</strong> Teeno processes (P1, P2, P3) ki delivered list ko compare karke PASS ya FAIL declare karta hai.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             H. SHORT THEORY SECTION (REQUIRED)
-             Hinglish: Formal academic theory section
-             ========================================== -->
-        <section class="card theory-card">
-            <div class="card-header">
-                <h2>8. Distributed Computing Theory & Academic Notes</h2>
-                <span class="card-subtitle">Formal definitions and architectural principles</span>
-            </div>
-            <div class="card-body theory-content">
-                <div class="theory-item">
-                    <h4>What is Total Order Multicast?</h4>
-                    <p>
-                        In distributed computing, a multicast communication primitive is defined as <strong>Totally Ordered</strong> if 
-                        all correct participating processes deliver all multicast messages in the <strong>exact same sequence</strong>. Formally: 
-                        if process \(P_i\) delivers message \(m_1\) before message \(m_2\), then every correct process \(P_j\) must also deliver 
-                        \(m_1\) before \(m_2\).
-                    </p>
-                </div>
-                <div class="theory-item">
-                    <h4>The Centralized Sequencer Architecture</h4>
-                    <p>
-                        In a centralized sequencer algorithm, one node is designated as the Sequencer. Whenever any process sends a multicast message, 
-                        it transmits it to the Sequencer. The Sequencer assigns a strictly monotonic integer sequence number \(S \in \mathbb{N}\) 
-                        and broadcasts the sequenced message. Each receiving process maintains a local variable <code>expected_seq</code> initialized to 1.
-                        A message with sequence number \(S\) is delivered to the application layer if and only if \(S = \text{expected\_seq}\). 
-                        If \(S > \text{expected\_seq}\), it is buffered in a pending queue until missing preceding messages arrive.
-                    </p>
-                </div>
-                <div class="theory-item">
-                    <h4>Arrival Order vs. Delivery Order</h4>
-                    <p>
-                        <strong>Physical Arrival Order:</strong> The actual wall-clock instant a packet reaches a process's network socket, 
-                        subject to routing latency and jitter.<br>
-                        <strong>Logical Delivery Order:</strong> The instant the message is handed off to the application logic after sequence checking.<br>
-                        <em>Crucial insight:</em> Arrival order can be completely disordered and different across nodes, but Delivery Order remains strictly uniform!
-                    </p>
-                </div>
-                <div class="theory-item note-box">
-                    <strong>⚠️ Simulation Disclaimer:</strong> This application is an educational software simulator running on Python Flask and Vanilla JavaScript. 
-                    It accurately models the logical states, queue buffers, and sequence transitions of Total Order Multicast, but does not use raw IP multicast or raw hardware socket protocols.
-                </div>
-            </div>
-        </section>
-
     </main>
 
     <footer class="app-footer">
         <p><strong>Group Message Order Tester</strong> &bull; Total Order Multicast Simulator</p>
-        <p class="footer-sub">Designed for Distributed Computing Coursework & Academic Demonstrations</p>
     </footer>
 
-    <!-- Hinglish: Vanilla JavaScript logic file ko link kiya gaya hai -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

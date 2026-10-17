@@ -1,7 +1,5 @@
 /* ==========================================================================
-   Group Message Order Tester - Modern Academic Dashboard Stylesheet
-   Theme: Clean Light Academic Theme with Indigo/Navy Accents
-   Hinglish: Yeh CSS file clean modern layout aur fully responsive design deti hai.
+   Group Message Order Tester - Dashboard Stylesheet
    ========================================================================== */
 
 :root {
@@ -65,7 +63,6 @@ body {
 
 /* ==========================================================================
    Header Section
-   Hinglish: Academic header jo title, subtitle aur system status display karta hai.
    ========================================================================== */
 .app-header {
     background: #ffffff;
@@ -183,7 +180,6 @@ body {
 
 /* ==========================================================================
    Dashboard Main Layout
-   Hinglish: Cards ka responsive grid layout
    ========================================================================== */
 .dashboard-grid {
     max-width: 1400px;
@@ -233,7 +229,6 @@ body {
 
 /* ==========================================================================
    1. Message Composer
-   Hinglish: Message bhejne ke controls aur forms
    ========================================================================== */
 .form-row {
     display: flex;
@@ -410,7 +405,6 @@ select:focus, input[type="text"]:focus {
 
 /* ==========================================================================
    2. Controls and Delay Settings
-   Hinglish: Sliders aur delay setting options
    ========================================================================== */
 .controls-toolbar {
     display: flex;
@@ -527,7 +521,6 @@ input[type="range"] {
 
 /* ==========================================================================
    3. Central Sequencer
-   Hinglish: Global sequence assignment table
    ========================================================================== */
 .sequencer-stat-badge {
     background: var(--primary-light);
@@ -603,7 +596,6 @@ input[type="range"] {
 
 /* ==========================================================================
    4. Distributed Process Node Panels (P1, P2, P3)
-   Hinglish: Process nodes ka card grid (Desktop par 3 columns, mobile par 1 column)
    ========================================================================== */
 .section-title-wrap {
     margin-bottom: 1rem;
@@ -795,7 +787,6 @@ input[type="range"] {
 
 /* ==========================================================================
    5. Total Order Verification Section
-   Hinglish: Formal verification pass/fail status
    ========================================================================== */
 .verification-summary-layout {
     display: flex;
@@ -950,7 +941,6 @@ input[type="range"] {
 
 /* ==========================================================================
    6. Simulation Event Log & Timeline
-   Hinglish: Realtime logs list
    ========================================================================== */
 .log-controls {
     display: flex;
@@ -1025,85 +1015,6 @@ input[type="range"] {
 }
 
 /* ==========================================================================
-   7. Hinglish "How It Works" Section
-   Hinglish: Clear boxes explaining each component
-   ========================================================================== */
-.hinglish-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.25rem;
-}
-
-.hinglish-box {
-    background: #f8fafc;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 1.25rem;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.hinglish-box:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: #cbd5e1;
-}
-
-.h-icon {
-    font-size: 1.6rem;
-    margin-bottom: 0.5rem;
-}
-
-.hinglish-box h3 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin-bottom: 0.65rem;
-}
-
-.hinglish-box p {
-    font-size: 0.85rem;
-    color: #475569;
-    margin-bottom: 0.4rem;
-    line-height: 1.45;
-}
-
-.hinglish-box strong {
-    color: #0f172a;
-}
-
-/* ==========================================================================
-   8. Theory & Academic Notes Section
-   Hinglish: Formal theory aur math notes
-   ========================================================================== */
-.theory-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1.15rem;
-}
-
-.theory-item h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin-bottom: 0.35rem;
-}
-
-.theory-item p {
-    font-size: 0.9rem;
-    color: #475569;
-    line-height: 1.6;
-}
-
-.note-box {
-    background: #fffbeb;
-    border-left: 4px solid var(--warning);
-    padding: 0.9rem 1.15rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.88rem;
-    color: #92400e;
-}
-
-/* ==========================================================================
    Footer
    ========================================================================== */
 .app-footer {
@@ -1116,14 +1027,8 @@ input[type="range"] {
     color: var(--text-muted);
 }
 
-.footer-sub {
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
-}
-
 /* ==========================================================================
-   Responsive Design (Desktop, Tablet, Mobile)
-   Hinglish: Mobile aur small screens ke liye clean vertical stacking
+   Responsive Design
    ========================================================================== */
 @media (max-width: 1024px) {
     .process-cards-grid {

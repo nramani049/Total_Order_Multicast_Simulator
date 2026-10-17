@@ -1,11 +1,9 @@
 /**
  * Group Message Order Tester - Total Order Multicast Simulator
  * Frontend Logic (Vanilla JavaScript)
- * Hinglish: Yeh script message submit karne, transit timers simulate karne,
- * buffers update karne aur total order verify karne ka kaam karti hai.
  */
 
-// Active scheduled transit timers (Reset ke waqt cancel karne ke liye)
+// Active scheduled transit timers
 let activeTransitTimers = [];
 
 // Simulation pause state
@@ -15,13 +13,13 @@ let pausedQueue = [];
 // Random delay flag
 let isRandomDelayEnabled = false;
 
-// DOM load hote hi simulation ka current state fetch karte hain
+// Fetch initial state on load
 document.addEventListener("DOMContentLoaded", () => {
     fetchSimulationState();
 });
 
 /**
- * Hinglish: Backend se current simulation state lekar pura UI refresh karta hai.
+ * Fetch current simulation state from backend and update UI.
  */
 async function fetchSimulationState() {
     try {
@@ -37,10 +35,7 @@ async function fetchSimulationState() {
 }
 
 /**
- * Hinglish: User jab "Send Message" click karta hai:
- * 1. Sender aur content ko validate karta hai.
- * 2. Backend /api/send par bhejta hai (Central Sequencer sequence number assign karta hai).
- * 3. Sequenced message ko teeno processes (P1, P2, P3) ke liye multicast transit par schedule karta hai.
+ * Handle message submission from composer form.
  */
 async function handleSendMessage(event) {
     event.preventDefault();
@@ -79,7 +74,7 @@ async function handleSendMessage(event) {
             updateSystemStatus("Simulating Multicast...", "badge-simulating");
             fetchSimulationState();
 
-            // Sequenced message ko teeno processes (P1, P2, P3) par multicast transit simulate karo
+            // Multicast message to all processes with simulated latency
             multicastMessageToProcesses(message);
         } else {
             showFeedback(data.error || "Failed to submit message", "error");
@@ -93,8 +88,7 @@ async function handleSendMessage(event) {
 }
 
 /**
- * Hinglish: Message ko P1, P2, aur P3 tak alag-alag delay ke saath schedule karta hai.
- * Yeh function simulate karta hai ki network mein packets travel kar rahe hain.
+ * Schedule message delivery to P1, P2, and P3 with simulated network latency.
  */
 function multicastMessageToProcesses(message, customDelays = null) {
     const processes = ["P1", "P2", "P3"];
@@ -105,19 +99,16 @@ function multicastMessageToProcesses(message, customDelays = null) {
         if (customDelays && customDelays[procId] !== undefined) {
             delayMs = customDelays[procId];
         } else if (isRandomDelayEnabled) {
-            // Random delay: 400ms se 3500ms ke beech
+            // Random delay between 400ms and 3500ms
             delayMs = Math.floor(Math.random() * 3100) + 400;
         } else {
-            // Manual delay sliders se value padho
             const sliderId = `delay-${procId.toLowerCase()}`;
             const slider = document.getElementById(sliderId);
             delayMs = slider ? parseInt(slider.value, 10) : 1000;
         }
 
-        // Timer create karke process arrival call karo
         const timerId = setTimeout(() => {
             if (isSimulationPaused) {
-                // Agar paused hai toh pending queue mein rakh lo
                 pausedQueue.push({ procId, messageId: message.id, delayMs });
             } else {
                 dispatchArrival(procId, message.id, delayMs);
@@ -129,8 +120,7 @@ function multicastMessageToProcesses(message, customDelays = null) {
 }
 
 /**
- * Hinglish: Jab transit timer expire hota hai, toh yeh function
- * backend /api/process/arrive ko call karke process buffer update karwata hai.
+ * Dispatch message arrival to process node endpoint.
  */
 async function dispatchArrival(processId, messageId, delayMs) {
     try {
@@ -146,7 +136,6 @@ async function dispatchArrival(processId, messageId, delayMs) {
 
         const data = await response.json();
         if (data.success) {
-            // State update karo aur verification check karo
             await fetchSimulationState();
         }
     } catch (err) {
@@ -155,7 +144,7 @@ async function dispatchArrival(processId, messageId, delayMs) {
 }
 
 /**
- * Hinglish: Pura dashboard render karta hai (Sequencer, P1, P2, P3, Timeline).
+ * Render all dashboard components from state snapshot.
  */
 function renderDashboard(state) {
     if (!state) return;
@@ -178,7 +167,7 @@ function renderDashboard(state) {
 }
 
 /**
- * Hinglish: Central Sequencer ki table update karta hai.
+ * Render sequencer messages table.
  */
 function renderSequencerTable(messages) {
     const tbody = document.getElementById("sequencer-messages-body");
@@ -207,10 +196,7 @@ function renderSequencerTable(messages) {
 }
 
 /**
- * Hinglish: Ek process card (P1/P2/P3) ke buffers ko render karta hai:
- * - Received list (Physical arrivals)
- * - Pending list (Held because Seq > Expected)
- * - Delivered list (Total Order Delivery)
+ * Render buffer states for a process node.
  */
 function renderProcessNode(procId, procData) {
     if (!procData) return;
@@ -291,7 +277,7 @@ function renderProcessNode(procId, procData) {
 }
 
 /**
- * Hinglish: Timeline container mein simulation events display karta hai.
+ * Render event logs in timeline container.
  */
 let currentEventLogs = [];
 function renderTimeline(logs) {
@@ -323,7 +309,7 @@ function filterEventLogs(filterType) {
         return;
     }
 
-    // Reverse order taaki latest event sabse upar dikhe
+    // Display newest events first
     const reversed = [...filtered].reverse();
 
     container.innerHTML = reversed.map(log => {
@@ -358,8 +344,7 @@ function clearEventLogDisplay() {
 }
 
 /**
- * Hinglish: Total Order property verify karta hai:
- * Backend /api/verify ko call karta hai aur visual comparison track render karta hai.
+ * Verify total order property and render comparison status.
  */
 async function checkTotalOrderVerification() {
     try {
@@ -449,7 +434,7 @@ function resetCriteriaItem(itemEl) {
 }
 
 /**
- * Hinglish: Global system status badge update karta hai.
+ * Update global system status badge.
  */
 function updateSystemStatus(text, badgeClass) {
     const badge = document.getElementById("system-status-badge");
@@ -458,11 +443,10 @@ function updateSystemStatus(text, badgeClass) {
 }
 
 /**
- * Hinglish: Simulation ko poori tarah reset karta hai.
- * Active timers clear karta hai aur backend state reset karwata hai.
+ * Reset simulation state and clear active timers.
  */
 async function handleResetSimulation() {
-    // 1. Sabhi active JavaScript timers clear karo
+    // Clear active transit timers
     activeTransitTimers.forEach(id => clearTimeout(id));
     activeTransitTimers = [];
     pausedQueue = [];
@@ -484,7 +468,7 @@ async function handleResetSimulation() {
 }
 
 /**
- * Hinglish: Transit ko pause ya resume karta hai.
+ * Toggle simulation transit pause state.
  */
 function togglePauseSimulation() {
     isSimulationPaused = !isSimulationPaused;
@@ -500,7 +484,7 @@ function togglePauseSimulation() {
         text.textContent = "Pause Transit";
         showFeedback("Simulation resumed. Releasing paused packets...", "success");
 
-        // Paused queue ke packets ko dispatch karo
+        // Dispatch queued packets on resume
         const toRelease = [...pausedQueue];
         pausedQueue = [];
         toRelease.forEach(item => {
@@ -510,7 +494,7 @@ function togglePauseSimulation() {
 }
 
 /**
- * Hinglish: Random delay mode toggle switch handler.
+ * Toggle random delay mode.
  */
 function toggleRandomDelayMode(event) {
     isRandomDelayEnabled = event.target.checked;
@@ -531,7 +515,7 @@ function toggleRandomDelayMode(event) {
 }
 
 /**
- * Hinglish: Manual slider ki value update karta hai.
+ * Update latency display for manual sliders.
  */
 function updateDelayDisplay(proc, value) {
     const label = document.getElementById(`delay-val-${proc}`);
@@ -541,10 +525,7 @@ function updateDelayDisplay(proc, value) {
 }
 
 /**
- * Hinglish: Quick academic preset scenarios run karta hai:
- * 1. in_order: Synchronous equal delays
- * 2. out_of_order: P2 ko Msg 2 pehle milta hai, Msg 1 baad mein (Buffer hold demo)
- * 3. high_jitter: Asymmetric delay scramble
+ * Load simulation scenario presets.
  */
 async function loadSampleScenario(scenarioKey) {
     await handleResetSimulation();
@@ -641,7 +622,7 @@ async function sendSampleMessageDirect(sender, content) {
 }
 
 /**
- * Hinglish: Inline feedback message show karta hai (success / error).
+ * Display inline feedback message banner.
  */
 function showFeedback(text, type = "success") {
     const banner = document.getElementById("composer-feedback");
@@ -655,7 +636,7 @@ function showFeedback(text, type = "success") {
 }
 
 /**
- * Hinglish: XSS attacks se bachne ke liye text ko escape karta hai.
+ * Escape HTML characters to prevent XSS.
  */
 function escapeHtml(str) {
     if (!str) return "";
@@ -666,3 +647,4 @@ function escapeHtml(str) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
+
